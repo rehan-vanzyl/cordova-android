@@ -93,6 +93,7 @@ public class PluginEntry {
             Class c = getClassByName(this.pluginClass);
             if (isCordovaPlugin(c)) {
                 this.plugin = (CordovaPlugin) c.newInstance();
+                this.plugin.serviceName = this.service;
                 this.plugin.initialize(ctx, webView);
                 return plugin;
             }
