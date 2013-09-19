@@ -33,6 +33,7 @@ import android.net.Uri;
  */
 public class CordovaPlugin {
     public String id;
+    public String serviceName;
     public CordovaWebView webView;					// WebView object
     public CordovaInterface cordova;
 

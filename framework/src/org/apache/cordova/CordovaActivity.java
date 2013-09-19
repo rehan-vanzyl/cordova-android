@@ -23,9 +23,6 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.cordova.CordovaInterface;
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.LOG;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,7 +49,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.webkit.ValueCallback;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
@@ -179,7 +175,7 @@ public class CordovaActivity extends Activity implements CordovaInterface {
 
     private Object lastResponseCode;
 
-    private String initCallbackClass;
+    private String initCallbackService;
 
     private Object LOG_TAG;
 
@@ -255,7 +251,7 @@ public class CordovaActivity extends Activity implements CordovaInterface {
 
         if(savedInstanceState != null)
         {
-            initCallbackClass = savedInstanceState.getString("callbackClass");
+            initCallbackService = savedInstanceState.getString("callbackServiceName");
         }
         
         if(!this.getBooleanProperty("ShowTitle", false))
@@ -904,10 +900,10 @@ public class CordovaActivity extends Activity implements CordovaInterface {
             mUploadMessage = null;
         }
         CordovaPlugin callback = this.activityResultCallback;
-        if(callback == null && initCallbackClass != null) {
+        if(callback == null && initCallbackService != null) {
             // The application was restarted, but had defined an initial callback
             // before being shut down.
-            this.activityResultCallback = appView.pluginManager.getPlugin(initCallbackClass);
+            this.activityResultCallback = appView.pluginManager.getPlugin(initCallbackService);
             callback = this.activityResultCallback;
         }
         if(callback != null) {
@@ -1187,10 +1183,10 @@ public class CordovaActivity extends Activity implements CordovaInterface {
     protected void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
-        if(this.activityResultCallback != null)
+        if (this.activityResultCallback != null && this.activityResultCallback.serviceName != null)
         {
-            String cClass = this.activityResultCallback.getClass().getName();
-            outState.putString("callbackClass", cClass);
+            String callbackServiceName = this.activityResultCallback.serviceName;
+            outState.putString("callbackServiceName", callbackServiceName);
         }
     }
 }
